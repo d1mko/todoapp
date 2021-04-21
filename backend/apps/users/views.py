@@ -1,36 +1,46 @@
 from django.contrib import auth
 from django.contrib.auth import get_user_model
+from django.middleware.csrf import get_token
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import ensure_csrf_cookie
-from rest_framework import permissions, generics
+from rest_framework import permissions, generics, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework.authentication import SessionAuthentication
 
 from .serializers import RegisterSerializer
 
 User = get_user_model()
 
 
+class Whoami(APIView):
+    permission_classes = (permissions.AllowAny,)
+    
+    def get(self, request):
+        if not request.user.is_authenticated:
+            return Response({'isAuthenticated': false})
+
+        return Response({'email': request.user.email})
+
+
 class CheckAuthenticatedView(APIView):
+    permission_classes = (permissions.AllowAny,)
     def get(self, request, format=None):
-        user = self.request.user
+        if not request.user.is_authenticated:
+            return Response({'isAuthenticated': 0})
 
-        try:
-            is_authenticated = user.is_authenticated
-
-            if is_authenticated:
-                return Response({'isAuthenticated': 'success'})
-            return Response({'isAuthenticated': 'error'})
-        except:
-            return Response({'error': 'Something went wrong'})
+        return Response({'isAuthenticated': 1})
 
 
-@method_decorator(ensure_csrf_cookie, name='dispatch')
 class GetCSRFToken(APIView):
     permission_classes = (permissions.AllowAny,)
 
     def get(self, request, format=None):
-        return Response({'success': 'CSRF cookie set'})
+        response = Response({'success': 'CSRF cookie set'})
+        response["Access-Control-Allow-Origin"] = "*"
+        response["Access-Control-Expose-Headers"] = ['Content-Type', 'X-CSRFToken', 'Set-Cookie']
+        response['X-CSRFToken'] = get_token(request)
+        return response
 
 
 @method_decorator(ensure_csrf_cookie, name='dispatch')
@@ -44,6 +54,7 @@ class RegisterView(generics.CreateAPIView):
 @method_decorator(ensure_csrf_cookie, name='dispatch')
 class LoginView(APIView):
     permission_classes = (permissions.AllowAny,)
+    authentication_classes = (SessionAuthentication, )
 
     def post(self, request, format=None):
         data = self.request.data
@@ -58,9 +69,11 @@ class LoginView(APIView):
                 auth.login(request, user)
                 return Response({'success': 'User authenticated'})
 
-            return Response({'error': 'Error Authenticating'})
+            return Response({'error': 'Error Authenticating'},
+                            status=status.HTTP_404_NOT_FOUND)
         except:
-            return Response({'error': 'Something went wrong when logging in'})
+            return Response({'error': 'Something went wrong when logging in'},
+                            status=status.HTTP_400_BAD_REQUEST)
 
 
 class LogoutView(APIView):
