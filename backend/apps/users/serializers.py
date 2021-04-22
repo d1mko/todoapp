@@ -31,7 +31,12 @@ class RegisterSerializer(serializers.ModelSerializer):
         email = validated_data['email']
         password = validated_data['password']
         User = get_user_model()
-        user = User.objects.create(email=email)
-        user.set_password(password)
-        user.save()
-        return user
+
+        try:
+            User.objects.filter(email=email)
+            return
+        except User.DoesNotExist:
+            user = User.objects.create(email=email)
+            user.set_password(password)
+            user.save()
+            return user
