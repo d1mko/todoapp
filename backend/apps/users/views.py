@@ -18,13 +18,14 @@ class Whoami(APIView):
     
     def get(self, request):
         if not request.user.is_authenticated:
-            return Response({'isAuthenticated': false})
+            return Response({'isAuthenticated': 'false'})
 
         return Response({'email': request.user.email})
 
 
 class CheckAuthenticatedView(APIView):
     permission_classes = (permissions.AllowAny,)
+
     def get(self, request, format=None):
         if not request.user.is_authenticated:
             return Response({'isAuthenticated': 0})
@@ -37,8 +38,6 @@ class GetCSRFToken(APIView):
 
     def get(self, request, format=None):
         response = Response({'success': 'CSRF cookie set'})
-        response["Access-Control-Allow-Origin"] = "*"
-        response["Access-Control-Expose-Headers"] = ['Content-Type', 'X-CSRFToken', 'Set-Cookie']
         response['X-CSRFToken'] = get_token(request)
         return response
 
