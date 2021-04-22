@@ -173,7 +173,7 @@
         <div class="confirm-delete">
             <form on:submit|preventDefault={deleteFn}>
                 <textarea readonly>{confirmText}</textarea>
-                <button type="submit">Yes</button>
+                <button on:click={remove = false} type="submit">Yes</button>
                 <button on:click={ () => remove = false} type="reset">Cancel</button>
             </form>
         </div>
@@ -187,7 +187,7 @@
                         <textarea class="add_text" bind:value={content}></textarea>
                     </div>
                     <div class="right">
-                        <button type="submit">Add todo</button>
+                        <button on:click={show = false} type="submit">Add todo</button>
                         <button on:click={ () => { show = !show; content = ''; }}>Cancel</button>
                     </div>
                 </div>

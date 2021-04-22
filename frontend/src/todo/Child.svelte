@@ -74,7 +74,7 @@
             <div class="confirm-delete">
                 <form on:submit|preventDefault={removeFn}>
                     <textarea readonly>{confirmText}</textarea>
-                    <button type="submit">Yes</button>
+                    <button on:click={remove = false} type="submit">Yes</button>
                     <button on:click={ () => remove = false} type="reset">Cancel</button>
                 </form>
             </div>

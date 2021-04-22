@@ -224,7 +224,7 @@
                 </div>
 
                 <div class="add_form">
-                    <form on:submit|preventDefault={ () => {createNewTodo(content, color)} }>
+                    <form on:submit|preventDefault={ () => {show=false; createNewTodo(content, color);} }>
                         <div class="form__inner">
                             <div class="left">
                                 <textarea class="add_text" bind:value={content}></textarea>
