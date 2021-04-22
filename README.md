@@ -24,8 +24,8 @@ docker-compose build
 docker-compose up -d
 ```
 4. Apply migrations by using `docker-compose exec web python manage.py migrate`.
-5. The backend project is running on http://localhost:8000, frontend - http://localhost:5000.
-
+5. The backend project is running on http://localhost:8000.
+6. To find the frontend network address run `docker-compose logs` command. In my case it is http://172.28.0.2:5000.
 ##### Without Docker and Compose:
 1. [Install Python3.8](https://www.python.org/downloads/).
 2. [Install PostgreSQL](https://www.postgresql.org/) and start it.
