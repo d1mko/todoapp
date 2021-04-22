@@ -1,14 +1,14 @@
-FROM node
+FROM node:latest
 
 WORKDIR /app/frontend
-COPY package.json /app/frontend
 
-RUN npm install -g npm
+COPY package-lock.json package-lock.json
+COPY package.json package.json
+
 RUN npm install
 
-COPY ./src ./src
-COPY ./public ./public
-
-RUN npm run dev
+COPY . .
 
 EXPOSE 5000
+ENV HOST 0.0.0.0
+

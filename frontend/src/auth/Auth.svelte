@@ -57,7 +57,7 @@
     }
 
     async function loginHandler() {
-        const resp = await fetch("http://localhost:8000/api/auth/login", {
+        const resp = (await fetch("http://localhost:8000/api/auth/login", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -68,9 +68,9 @@
                 "email": email,
                 "password": password
             }),
-        })
+        })).status
 
-        if (resp.status === 200) {
+        if (resp === 200) {
             let authenticated = await isAuthenticate();
             if (authenticated) {
                 localStorage.setItem('sessionEmail', email);
