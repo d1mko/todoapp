@@ -18,9 +18,7 @@ async function isAuthenticate() {
     })
         .then(res => res.json())
         .then(data => {
-            console.log('in fetch')
             isUser = data.isAuthenticated !== 0;
-            console.log(isUser)
             return isUser
         });
 }

@@ -1,6 +1,6 @@
 <script>
     import {getCSRF} from "../shared";
-    import { sessionEmail } from '../stores/auth'
+    import {sessionEmail} from '../stores/auth'
 
     async function logout() {
         let csrf = await getCSRF();
@@ -22,12 +22,35 @@
         })).status
 
         if (logOut === 200) {
-            localStorage.clear();
-            sessionEmail.set(null);
             location.replace('/');
-        }
+            {
+                localStorage.removeItem('sessionEmail');
+                sessionEmail.update(() => localStorage.getItem('sessionEmail'));
+            }
 
+        }
     }
 </script>
 
-<button on:click={logout}>Logout</button>
+<style>
+    .nav__btn {
+        display: inline-block;
+        border: none;
+
+        background-color: #333333;
+        color: #ffffff;
+        text-transform: uppercase;
+        font-size: 17px;
+        font-family: "Montserrat", sans-serif;
+
+        transition: color .1s linear;
+    }
+
+
+    .nav__btn:hover {
+        color: #fce38a;
+        cursor: pointer;
+    }
+</style>
+
+<button class="nav__btn" on:click={logout}>Logout</button>

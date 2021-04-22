@@ -1,7 +1,8 @@
 <script>
-    import Logout from './auth/Logout.svelte'
+    import Todos from './todo/Todos.svelte'
 </script>
 
-<h1>Hello</h1>
+<!-- TODO: make cancel, make window delete confirmation design, refactoring, docker; -->
 
-<Logout />
+
+<Todos/>
